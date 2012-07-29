@@ -1,0 +1,60 @@
+#lang racket
+(define atom?
+    (lambda (x)
+        (and (not (pair? x)) (not (null? x)))))
+
+(define list_of_atoms?
+  (lambda (lat)
+    (cond
+      [(null? lat) #t]
+      [(atom? (car lat)) (list_of_atoms? (cdr lat))]
+      [else #f])))
+
+(define member?
+  (lambda (a lat)
+    (cond
+      [(null? lat) #f]
+      [else (or (eq? a (car lat)) (member? a (cdr lat)))])))
+   
+(define remove_member
+  (lambda (a lat)
+    (cond
+      [(null? lat) (list)]
+      [(eq? a (car lat)) (cdr lat)]
+      [else (cons (car lat) (remove_member a (cdr lat)))]))) 
+
+(define firsts
+  (lambda (ll)
+    (cond
+      [(null? ll) (list)]
+      [else (cons (car (car ll)) (firsts(cdr ll)))])))
+
+(define insert_right
+  (lambda (new after_this lat)
+    (cond
+      [(null? lat) (list)]
+      [(eq? after_this (car lat)) (cons after_this (cons new (cdr lat)))]
+      [else (cons (car lat) (insert_right new after_this (cdr lat)))])))
+
+(define insert_left
+  (lambda (new left_of lat)
+    (cond
+      [(null? lat) (list)]
+      [(eq? left_of (car lat)) (cons new lat)]
+      [else (cons (car lat) (insert_left new left_of (cdr lat)))])))
+
+(define substitute
+  (lambda (new old lat)
+    (cond 
+      [(null? lat) (list)]
+      [(eq? old (car lat)) (cons new (cdr lat))]
+      [else (cons (car lat) (substitute new old (cdr lat)))])))
+
+(define x (list 1 2 3 4))
+(remove_member 2 x)
+(remove_member 3 x)
+(define z (list (list 1 2 3) (list 4 5 6)))
+(firsts z)
+(insert_right 6 2 x)
+(insert_left 6 2 x)
+(substitute 6 2 x)
