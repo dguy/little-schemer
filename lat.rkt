@@ -23,6 +23,14 @@
       [(eq? a (car lat)) (cdr lat)]
       [else (cons (car lat) (remove_member a (cdr lat)))]))) 
 
+(define multi_remove_member
+  (lambda (value lat)
+    (cond
+      [(null? lat)(list)]
+      [(eq? value (car lat)) (multi_remove_member value (cdr lat))]
+      [else (cons (car lat) (multi_remove_member value (cdr lat)))]
+    )))
+
 (define firsts
   (lambda (ll)
     (cond
@@ -50,7 +58,17 @@
       [(eq? old (car lat)) (cons new (cdr lat))]
       [else (cons (car lat) (substitute new old (cdr lat)))])))
 
-(define x (list 1 2 3 4))
+(define subst2
+  (lambda (new first second lat)
+    (cond
+      [(null? lat) (list)]
+      [(or (eq? first (car lat)) (eq? second (car lat))) (cons new (cdr lat))]
+      [ else (cons (car lat) (subst2 new first second (cdr lat)))])))
+
+
+    
+    
+(define x (list 1 2 3 4 1 2 3 4))
 (remove_member 2 x)
 (remove_member 3 x)
 (define z (list (list 1 2 3) (list 4 5 6)))
@@ -58,3 +76,5 @@
 (insert_right 6 2 x)
 (insert_left 6 2 x)
 (substitute 6 2 x)
+(subst2 6 5 3 x)
+(multi_remove_member 1 x)
