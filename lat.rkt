@@ -58,6 +58,13 @@
       [(eq? left_of (car lat)) (cons new lat)]
       [else (cons (car lat) (insert_left new left_of (cdr lat)))])))
 
+(define multi_insert_left
+  (lambda (new left_of lat)
+    (cond
+      [(null? lat) (list)]
+      [(eq? left_of (car lat)) (cons new(cons left_of(multi_insert_left new left_of (cdr lat))))]
+      [else (cons (car lat) (multi_insert_left new left_of (cdr lat)))])))
+
 (define substitute
   (lambda (new old lat)
     (cond 
@@ -86,3 +93,4 @@
 (subst2 6 5 3 x)
 (multi_remove_member 1 x)
 (multi_insert_right 6 1 x)
+(multi_insert_left 6 1 x)
