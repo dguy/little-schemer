@@ -41,4 +41,21 @@
       [else (cons (plus (car tup1) (car tup2)) (tuple+ (cdr tup1) (cdr tup2)))])))
 
 
+(define gt
+  (lambda (a b)
+    (cond
+        [(zero? a) #f]
+        [(zero? b) #t]
+        [else (gt (sub1 a) (sub1 b))])))
 
+
+(define lt
+  (lambda (a b)
+    (cond
+        [(zero? b) #f]
+        [(zero? a) #t]
+        [else (lt (sub1 a) (sub1 b))])))
+
+(define equal
+  (lambda (a b)
+      (not (or (gt a b) (lt a b)))))
