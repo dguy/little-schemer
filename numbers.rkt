@@ -32,3 +32,13 @@
     (cond
       [(zero? m) 0]
       [else (plus n (x n (sub1 m)))])))
+
+(define tuple+
+  (lambda (tup1 tup2)
+    (cond
+      [(null? tup1) tup2]
+      [(null? tup2) tup1]
+      [else (cons (plus (car tup1) (car tup2)) (tuple+ (cdr tup1) (cdr tup2)))])))
+
+
+
