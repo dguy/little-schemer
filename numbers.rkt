@@ -59,3 +59,15 @@
 (define equal
   (lambda (a b)
       (not (or (gt a b) (lt a b)))))
+
+(define pow
+  (lambda (a b)
+    (cond
+      [(zero? b) 1]
+      [else (x a (pow a (sub1 b)))])))
+
+(define divide
+  (lambda (a b)
+    (cond
+      [(lt a b) 0]
+      [else (add1 (divide (minus a b) b))])))
