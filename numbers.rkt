@@ -1,18 +1,13 @@
 #lang racket
 
-(define add1
-  (lambda (n)
-    (+ n 1)))
+(define (add1 n) (+ n 1))
 
-(define sub1
-  (lambda (n)
-    (- n 1)))
+(define (sub1 n) (- n 1))
 
-(define plus
-  (lambda (n m)
+(define (plus n m)
     (cond
       [(zero? m) n]
-      [else (add1 (plus n (sub1 m)))])))
+      [else (add1 (plus n (sub1 m)))]))
 
 (define minus
   (lambda (n m)

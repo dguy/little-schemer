@@ -86,8 +86,11 @@
       [(or (eq? first (car lat)) (eq? second (car lat))) (cons new (cdr lat))]
       [ else (cons (car lat) (subst2 new first second (cdr lat)))])))
 
-
-    
+(define (no-nums lat)
+  (cond
+    [(null? lat) (list)]
+    [(number? (car lat)) (no-nums (cdr lat))]
+    [else (cons (car lat) (no-nums (cdr lat)))]))
     
 (define x (list 1 2 3 4 1 2 3 4))
 (remove_member 2 x)
@@ -102,3 +105,4 @@
 (multi_insert_right 6 1 x)
 (multi_insert_left 6 1 x)
 (multi_substitute 6 1 x)
+(no-nums (list 1 2 "a" "b" 3 4 "c" "d"))
