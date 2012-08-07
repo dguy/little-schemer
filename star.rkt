@@ -1,34 +1,43 @@
 #lang racket
 (require "lat.rkt" "eqan.rkt")
 
-(provide remove-member* insert-after* occur*)
+(provide remove-member* insert-after* occur* substitute*)
 
-(define (remove-member* a l)
+(define (remove-member* a things)
   (cond
-    [(null? l) (list)]
-    [(atom? (car l))
+    [(null? things) (list)]
+    [(atom? (car things))
      (cond
-        [(eq? a (car l)) (remove-member* a (cdr l))]
-        [else (cons (car l) (remove-member* a (cdr l)))])
+        [(eq? a (car things)) (remove-member* a (cdr things))]
+        [else (cons (car things) (remove-member* a (cdr things)))])
        ]
-     [else (cons (remove-member* a (car l)) (remove-member* a (cdr l)))]))
+     [else (cons (remove-member* a (car things)) (remove-member* a (cdr things)))]))
 
 
-(define (insert-after* new old l)
+(define (insert-after* new old things)
   (cond
-    [(null? l) (list)]
-    [(atom? (car l))
+    [(null? things) (list)]
+    [(atom? (car things))
      (cond
-       [(eq? old (car l)) (cons old (cons new (insert-after* new old (cdr l))))]
-       [else (cons (car l) (insert-after* new old (cdr l)))])]
-    [else (cons (insert-after* new old (car l)) (insert-after* new old (cdr l)))]))
+       [(eq? old (car things)) (cons old (cons new (insert-after* new old (cdr things))))]
+       [else (cons (car things) (insert-after* new old (cdr things)))])]
+    [else (cons (insert-after* new old (car things)) (insert-after* new old (cdr things)))]))
 
-(define (occur* value l)
+(define (occur* value things)
   (cond
-    [(null? l) 0]
-    [(atom? (car l))
+    [(null? things) 0]
+    [(atom? (car things))
      (cond
-       [(eqan? value (car l)) (add1 (occur* value (cdr l)))]
-       [else (occur* value (cdr l))])]
-    [else (+ (occur* value (car l)) (occur* value (cdr l)))]))
+       [(eqan? value (car things)) (add1 (occur* value (cdr things)))]
+       [else (occur* value (cdr things))])]
+    [else (+ (occur* value (car things (occur* value (cdr things)))))]))
        
+
+(define (substitute* old new things)
+  (cond
+    [(null? things) (list)]
+    [(atom? (car things))
+     (cond 
+       [(eqan? old (car things)) (cons new (substitute* new old (cdr things)))]
+       [else (cons (car things) (substitute* new old (cdr things)))])]
+    [else (cons (substitute* new old (car things)) (substitute* new old (cdr things)))]))
