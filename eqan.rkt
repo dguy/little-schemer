@@ -1,4 +1,6 @@
 #lang racket
+(provide eqan?)
+
 (define (eqan? a b)
   (cond 
     [(and (number? a) (number? b)) (= a b)]
