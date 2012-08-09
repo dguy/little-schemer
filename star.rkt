@@ -1,7 +1,7 @@
 #lang racket
 (require "lat.rkt" "eqan.rkt")
 
-(provide remove-member* insert-after* occur* substitute*)
+(provide remove-member* insert-after* occur* substitute* insert-before* member*)
 
 (define (remove-member* a things)
   (cond
