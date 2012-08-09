@@ -2,7 +2,7 @@
 
 (require "atom.rkt" "set.rkt")
 
-(provide a-pair? first second build-pair set-of-pairs? reverse-pair)
+(provide a-pair? first second build-pair set-of-pairs? reverse-pair seconds)
 
 (define (a-pair? things)
   (and (not (atom? things))
@@ -28,3 +28,8 @@
 
 (define (reverse-pair pair)
   (build-pair (second pair) (first pair)))
+
+(define (seconds pairs)
+  (cond
+    [(null? pairs) (list)]
+    [else (cons (second (car pairs)) (seconds (cdr pairs)))]))
