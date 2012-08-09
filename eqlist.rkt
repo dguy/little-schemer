@@ -10,8 +10,7 @@
     [(or (null? xs) (null? ys)) #f]
     [(and (atom? (car xs)) (atom? (car ys))) 
      (and (eqan? (car xs) (car ys)) (eqlist (cdr xs) (cdr ys)))]
-    [(and (not (atom? (car xs))) (not (atom? (car ys)))) 
-     (and (eqlist (car xs) (car ys)) (eqlist (cdr xs) (cdr ys)))]
-    [else #f]))
+    [(or (atom? (car xs)) (atom? (car ys))) #f]
+    [else (and (eqlist (car xs) (car ys)) (eqlist (cdr xs) (cdr ys)))]))
     
 
