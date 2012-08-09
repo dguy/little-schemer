@@ -41,3 +41,21 @@
        [(eqan? old (car things)) (cons new (substitute* new old (cdr things)))]
        [else (cons (car things) (substitute* new old (cdr things)))])]
     [else (cons (substitute* new old (car things)) (substitute* new old (cdr things)))]))
+
+
+(define (insert-before* new old things)
+  (cond
+    [(null? things) (list)]
+    [(atom? (car things))
+     (cond
+       [(eqan? old (car things)) (cons new (cons old (insert-before* old new (cdr things))))]
+       [else (cons (car things) (insert-before* old new (cdr things)))])]
+    [else (cons (insert-before* old new (car things)) (insert-before* old new (cdr things)))]))
+
+(define (member* value things)
+  (cond
+    [(null? things) #f]
+    [(atom? (car things))
+       (or (eqan? value (car things)) (member* value (cdr things)))]
+    [else (or (member* value (car things)) (member* value (cdr things)))]))
+       
