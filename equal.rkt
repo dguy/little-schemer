@@ -1,6 +1,6 @@
 #lang racket
 
-(require "lat.rkt" "eqan.rkt")
+(require "atom.rkt" "eqan.rkt")
 
 (provide equal?)
 
