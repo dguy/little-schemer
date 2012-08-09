@@ -3,14 +3,25 @@
 
 (provide value)
 
-(define (value aexp)
-  (cond
-    [(atom? aexp) aexp]
-    [(eq? (car (cdr aexp)) (quote +)) 
-     (plus (value (car aexp)) (value (car (cdr (cdr aexp)))))]
-    [(eq? (car (cdr aexp)) (quote x)) 
-     (x (value (car aexp)) (value (car (cdr (cdr aexp)))))]
-    [else 
-     (pow (value (car aexp)) (value (car (cdr (cdr aexp)))))]))
-    
+(define (1st-sub-exp aexp)
+  (car (cdr aexp)))
 
+(define (2nd-sub-exp aexp)
+  (car (cdr (cdr aexp))))
+
+(define (operator aexp)
+  (car aexp))
+
+(define (value nexp)
+  (cond 
+    [(atom? nexp) nexp]
+    [(eq? (operator nexp) (quote +))
+     (plus (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]
+    [(eq? (operator nexp) (quote x))
+     (x (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]
+    [else
+     (pow (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]))
+
+(value (list '+ 1 2))
+(value (list 'x 3 2))
+(value (list '^ 3 2))

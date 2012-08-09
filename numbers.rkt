@@ -1,5 +1,7 @@
 #lang racket
 
+(provide x plus pow)
+
 (define (add1 n) (+ n 1))
 
 (define (sub1 n) (- n 1))
