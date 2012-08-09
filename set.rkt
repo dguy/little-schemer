@@ -1,6 +1,6 @@
 #lang racket
 
-(require "member.rkt" "remove-member.rkt")
+(require "member.rkt" "remove-member.rkt" "equal.rkt")
 
 (provide set? makeset subset? eqset? intersect? intersection union diff)
 
@@ -13,7 +13,7 @@
 (define (makeset things)
   (cond
     [(null? things) (list)]
-    [else (cons (car things) (makeset (multi-remove-member (car things) (cdr things))))]))
+    [else (cons (car things) (makeset (multi-remove-member equal? (car things) (cdr things))))]))
 
 
 (define (subset? setx sety)

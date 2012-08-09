@@ -2,17 +2,21 @@
 
 (require "equal.rkt")
 
-(provide remove-member multi-remove-member)
+(provide remove-member multi-remove-member remove-member-equal)
 
-(define (remove-member val things)
+(define (remove-member pred?)
+  (lambda (val things)
+    (cond
+      [(null? things) (list)]
+      [(pred? val (car things)) (cdr things)] 
+      [else (cons (car things) ((remove-member pred?) val (cdr things)))])))
+
+
+(define (remove-member-equal val things)
+  ((remove-member equal?) val things))
+
+(define (multi-remove-member pred? val things)
   (cond
     [(null? things) (list)]
-    [(equal? val (car things)) (cdr things)]
-    [else (cons (car things) (remove-member val (cdr things)))]))
-
-
-(define (multi-remove-member val things)
-  (cond
-    [(null? things) (list)]
-    [(equal? val (car things)) (multi-remove-member val (cdr things))]
-    [else (cons (car things) (multi-remove-member val (cdr things)))]))
+    [(pred? val (car things)) (multi-remove-member pred? val (cdr things))]
+    [else (cons (car things) (multi-remove-member pred? val (cdr things)))]))
