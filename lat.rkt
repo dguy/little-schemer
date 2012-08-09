@@ -17,12 +17,32 @@
       [(null? ll) (list)]
       [else (cons (car (car ll)) (firsts(cdr ll)))])))
 
+(define (insert pred? op)
+  (lambda (new value lat)
+    (cond
+      [(null? lat) (list)]
+      [(pred? (car lat) value) (op new lat)]
+      [else (cons (car lat) ((insert pred? op) new value (cdr lat)))])))
+    
+(define (insert-right2 pred? new value lat)
+    ((insert pred? (lambda (new lat) (cons (car lat) (cons new (cdr lat))))) new value lat))
+
+(define (insert-left2 pred? new value lat)
+    ((insert pred? (lambda (new lat) (cons new  lat))) new value lat))
+
 (define (insert-right pred?)
   (lambda (new value lat)
     (cond
       [(null? lat) (list)]
       [(pred? (car lat) value) (cons (car lat) (cons new (cdr lat)))]
       [else (cons (car lat) ((insert-right pred?) new value (cdr lat)))])))
+
+(define (insert-left pred?)
+  (lambda (new value lat)
+    (cond
+      [(null? lat) (list)]
+      [(pred? (car lat) value) (cons new lat)]
+      [else (cons (car lat) ((insert-left pred?) new value (cdr lat)))])))
 
 (define (multi-insert-right pred?) 
   (lambda (new value lat)
@@ -31,12 +51,6 @@
       [(pred? (car lat) value) (cons (car lat) (cons new ((multi-insert-right pred?) new value (cdr lat))))]
       [else (cons (car lat) ((multi-insert-right pred?) new value (cdr lat)))])))
 
-(define (insert-left pred?)
-  (lambda (new value lat)
-    (cond
-      [(null? lat) (list)]
-      [(pred? (car lat) value) (cons new lat)]
-      [else (cons (car lat) ((insert-left pred?) new value (cdr lat)))])))
 
 (define (multi-insert-left pred?)
   (lambda (new value lat)
