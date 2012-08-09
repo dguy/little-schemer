@@ -9,12 +9,6 @@
       [(atom? (car lat)) (list_of_atoms? (cdr lat))]
       [else #f])))
 
-(define member?
-  (lambda (a lat)
-    (cond
-      [(null? lat) #f]
-      [else (or (eq? a (car lat)) (member? a (cdr lat)))])))
-   
 (define remove_member
   (lambda (a lat)
     (cond
