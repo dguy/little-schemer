@@ -2,7 +2,7 @@
 
 (require "set.rkt" "firsts.rkt" "pairs.rkt")
 
-(provide fun? reverse-relation full-fun?)
+(provide fun? reverse-relation one-to-one?)
 
 (define (fun? relation)
    (set? (firsts relation))) 
@@ -12,5 +12,5 @@
     [(null? relation) (list)]
     [else (cons (reverse-pair (car relation)) (reverse-relation (cdr relation)))]))
 
-(define (full-fun? relation)
+(define (one-to-one? relation)
   (and (fun? relation) (set? (seconds relation))))
