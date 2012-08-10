@@ -2,7 +2,7 @@
 
 (require "atom.rkt")
 
-(provide list-of-atoms? firsts insert-right multi-insert-right insert-left multi-insert-left substitute multi-substitute subst2 no-nums)
+(provide insert list-of-atoms? firsts insert-right multi-insert-right insert-left multi-insert-left substitute multi-substitute subst2 no-nums multi-insert)
 
 (define list-of-atoms?
   (lambda (lat)
@@ -24,7 +24,7 @@
       [(pred? (car lat) value) (sequence new lat)]
       [else (cons (car lat) ((insert pred? sequence) new value (cdr lat)))])))
   
-(define insert-right (insert equal? (lambda(new lat) (cons (car lat)(cons new (cdr lat)))))
+(define insert-right (insert equal? (lambda(new lat) (cons (car lat)(cons new (cdr lat))))))
 (define insert-left  (insert equal? (lambda(new lat) (cons new lat))))
 
 
