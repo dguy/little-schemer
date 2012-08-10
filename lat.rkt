@@ -17,61 +17,35 @@
       [(null? ll) (list)]
       [else (cons (car (car ll)) (firsts(cdr ll)))])))
 
-(define (insert pred? op)
+(define (insert pred? sequence)
   (lambda (new value lat)
     (cond
       [(null? lat) (list)]
-      [(pred? (car lat) value) (op new lat)]
-      [else (cons (car lat) ((insert pred? op) new value (cdr lat)))])))
-    
-(define (insert-right2 pred? new value lat)
-    ((insert pred? (lambda (new lat) (cons (car lat) (cons new (cdr lat))))) new value lat))
+      [(pred? (car lat) value) (sequence new lat)]
+      [else (cons (car lat) ((insert pred? sequence) new value (cdr lat)))])))
+  
+(define insert-right (insert equal? (lambda(new lat) (cons (car lat)(cons new (cdr lat)))))
+(define insert-left  (insert equal? (lambda(new lat) (cons new lat))))
 
-(define (insert-left2 pred? new value lat)
-    ((insert pred? (lambda (new lat) (cons new  lat))) new value lat))
 
-(define (insert-right pred?)
+(define (multi-insert pred? sequence)
   (lambda (new value lat)
     (cond
       [(null? lat) (list)]
-      [(pred? (car lat) value) (cons (car lat) (cons new (cdr lat)))]
-      [else (cons (car lat) ((insert-right pred?) new value (cdr lat)))])))
+      [(pred? (car lat) value) (sequence new lat ((multi-insert pred? sequence) new value (cdr lat)))] 
+      [else (cons (car lat) ((multi-insert pred? sequence) new value (cdr lat)))])))
+     
+(define (sequence-right new lat future)
+  (cons (car lat) (cons new future)))
 
-(define (insert-left pred?)
-  (lambda (new value lat)
-    (cond
-      [(null? lat) (list)]
-      [(pred? (car lat) value) (cons new lat)]
-      [else (cons (car lat) ((insert-left pred?) new value (cdr lat)))])))
+(define (sequence-left new lat future)
+  (cons new (cons (car lat) future)))
 
-(define (multi-insert-right pred?) 
-  (lambda (new value lat)
-    (cond
-      [(null? lat) (list)]
-      [(pred? (car lat) value) (cons (car lat) (cons new ((multi-insert-right pred?) new value (cdr lat))))]
-      [else (cons (car lat) ((multi-insert-right pred?) new value (cdr lat)))])))
+(define multi-insert-right (multi-insert equal? sequence-right))
+(define multi-insert-left (multi-insert equal? sequence-left))
 
-
-(define (multi-insert-left pred?)
-  (lambda (new value lat)
-    (cond
-      [(null? lat) (list)]
-      [(pred? (car lat) value) (cons new(cons (car lat) ((multi-insert-left pred?) new value (cdr lat))))]
-      [else (cons (car lat) ((multi-insert-left pred?) new value (cdr lat)))])))
-
-(define (substitute pred?)
-  (lambda (new value lat)
-    (cond 
-      [(null? lat) (list)]
-      [(pred? (car lat) value) (cons new (cdr lat))]
-      [else (cons (car lat) ((substitute pred?) new value (cdr lat)))])))
-
-(define (multi-substitute pred?)
-  (lambda (new value lat)
-    (cond
-      [(null? lat) (list)]
-      [(pred? (car lat) value) (cons new ((multi-substitute pred?) new value (cdr lat)))]
-      [else (cons (car lat) ((multi-substitute pred?) new value (cdr lat)))])))
+(define substitute (insert equal? (lambda(new lat) (cons new (cdr lat)))))
+(define multi-substitute (multi-insert equal? (lambda(new lat future) (cons new future))))
 
 (define subst2
   (lambda (new first second lat)
@@ -85,3 +59,8 @@
     [(null? lat) (list)]
     [(number? (car lat)) (no-nums (cdr lat))]
     [else (cons (car lat) (no-nums (cdr lat)))]))
+
+(define (concat x-things y-things)
+  (cond
+    [(null? x-things) y-things]
+    [else (cons (car x-things) (concat (cdr x-things) y-things))]))
