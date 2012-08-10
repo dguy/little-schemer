@@ -15,12 +15,13 @@
 (define (value nexp)
   (cond 
     [(atom? nexp) nexp]
-    [(eq? (operator nexp) (quote +))
-     (plus (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]
-    [(eq? (operator nexp) (quote x))
-     (x (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]
-    [else
-     (pow (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]))
+    [else ((atom-to-function (operator nexp)) (value (1st-sub-exp nexp)) (value (2nd-sub-exp nexp)))]))
+
+(define (atom-to-function atom)
+  (cond
+    [(eq? 'x atom) x]
+    [(eq? '+ atom) plus]
+    [else pow]))
 
 (value (list '+ 1 2))
 (value (list 'x 3 2))
