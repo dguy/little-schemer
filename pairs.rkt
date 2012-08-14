@@ -2,7 +2,7 @@
 
 (require "atom.rkt" "set.rkt")
 
-(provide a-pair? first second build-pair set-of-pairs? reverse-pair seconds)
+(provide a-pair? first second build-pair set-of-pairs? reverse-pair seconds shift)
 
 (define (a-pair? things)
   (and (not (atom? things))
@@ -33,3 +33,33 @@
   (cond
     [(null? pairs) (list)]
     [else (cons (second (car pairs)) (seconds (cdr pairs)))]))
+
+(define (shift pair)
+  (build-pair (first (first pair))
+    (build-pair (second (first pair)) (second pair))))
+
+(define (align pair-or-atom)
+  (cond
+    [(atom? pair-or-atom) pair-or-atom]
+    [(a-pair? (first pair-or-atom)) (align (shift pair-or-atom))] 
+    [else (build-pair (first pair-or-atom) (align (second pair-or-atom)))]))
+
+(define (length* pair-or-atom)
+  (cond
+    [(atom? pair-or-atom) 1]
+    [else (+ (length* (first pair-or-atom))
+             (length* (second pair-or-atom)))]))
+
+
+(define (weight* pair-or-atom)
+  (cond
+    [(atom? pair-or-atom) 1]
+    [else (+ (* (weight* (first pair-or-atom)) 2)
+             (weight* (second pair-or-atom)))]))
+
+(define (shuffle pair-or-atom)
+  (cond
+    [(atom? pair-or-atom) pair-or-atom]
+    [(a-pair? (first pair-or-atom)) (shuffle (reverse-pair pair-or-atom))]
+    [else (build-pair (first pair-or-atom) (shuffle (second pair-or-atom)))]))
+    
