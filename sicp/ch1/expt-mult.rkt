@@ -1,9 +1,12 @@
 #lang racket
 
-(provide fast-expt square iterative-expt mult)
+(provide fast-expt square iterative-expt mult cube)
 
-(define (square a)
-  (* a a))
+
+(define (square a) (* a a))
+(define (double x) (+ x x))
+(define (halve x) (/ x 2))
+(define (cube a) (* a (square a)))
 
 (define (fast-expt b n)
   (cond 
@@ -20,8 +23,6 @@
   (iter-expt 1 b n))
 
 
-(define (double x) (+ x x))
-(define (halve x) (/ x 2))
 
 (define (* a b)
   (cond

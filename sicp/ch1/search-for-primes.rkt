@@ -26,4 +26,3 @@
       (+ from 1)
       from))
   (search (start from) to 0))
-

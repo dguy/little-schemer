@@ -1,10 +1,14 @@
 #lang racket
 
-(provide divisible? square fast-prime? smallest-divisor prime?)
+(provide cube halve double divisible? 
+         square fast-prime? smallest-divisor 
+         prime? sum sum-cubes sum-ints)
 
 (define (divisible? n by) (= 0 (remainder n by)))
-
 (define (square n) (* n n))
+(define (cube n) (* n (square n)))
+(define (halve n) (/ n 2))
+(define (double n) (+ n n))
 
 (define (exp-mod base exponent m)
   (cond
@@ -39,3 +43,15 @@
   (find-divisor n 2))
 
 (define (prime? n) (= n (smallest-divisor n)))
+
+(define (sum term a next b)
+  (if (> a b)
+    0
+    (+ (term a)
+       (sum term (next a) next b))))
+
+(define (inc n) (+ n 1))
+(define (sum-cubes a b) (sum cube a inc b))
+(define (sum-ints a b) (sum identity a inc b))
+
+

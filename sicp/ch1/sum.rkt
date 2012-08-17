@@ -2,7 +2,7 @@
 
 (provide sum)
 
-(define (sum a b term next)
+(define (sum a term b next)
   (if (> a b)
     0
     (+ (term a)
