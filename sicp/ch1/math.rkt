@@ -27,11 +27,15 @@
 
 
 (define (smallest-divisor n)
+  (define (next n)
+    (if (= 2 n) 
+      3
+      (+ 2 n)))
   (define (find-divisor n test)
     (cond
       ((> (square test) n) n)
       ((divisible? n test) test)
-      (else (find-divisor n (+ 1 test)))))
+      (else (find-divisor n (next test)))))
   (find-divisor n 2))
 
 (define (prime? n) (= n (smallest-divisor n)))
