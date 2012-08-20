@@ -5,7 +5,8 @@
          prime? sum sum-cubes sum-ints
          iterative-sum iter-sum-ints
          product-of-range iter-product-of-range
-         factorial sum2 product2 iter-sum2 iter-product2)
+         factorial sum2 product2 iter-sum2 iter-product2
+         sum-primes-in-range)
 
 (define (divisible? n by) (= 0 (remainder n by)))
 (define (square n) (* n n))
@@ -102,4 +103,15 @@
 (define (product2 a b) (accumulate * 1 identity a inc b))
 (define (iter-sum2 a b) (iterative-accumulate + 0 identity a inc b))
 (define (iter-product2 a b) (iterative-accumulate * 1 identity a inc b))
+
+(define (filtered-accumulate combiner filter null-value term a next b)  
+  (cond
+    ((> a b) null-value)
+    ((filter a) (combiner (term a) 
+              (filtered-accumulate combiner filter null-value term (next a) next b)))
+    (else (combiner null-value (filtered-accumulate combiner filter null-value term (next a) next b)))))
+  ;(if (or (> a b) (not (filter a)))
+  ;  null-value
+
+(define (sum-primes-in-range a b) (filtered-accumulate + prime? 0 identity a inc b))
 
