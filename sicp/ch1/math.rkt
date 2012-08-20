@@ -3,7 +3,9 @@
 (provide cube halve double divisible? 
          square fast-prime? smallest-divisor 
          prime? sum sum-cubes sum-ints
-         iterative-sum iter-sum-ints)
+         iterative-sum iter-sum-ints
+         product-of-range iter-product-of-range
+         factorial sum2 product2 iter-sum2 iter-product2)
 
 (define (divisible? n by) (= 0 (remainder n by)))
 (define (square n) (* n n))
@@ -64,3 +66,40 @@
       
 
 (define (iter-sum-ints a b) (iterative-sum identity a inc b))
+
+(define (product term a next b)
+  (if (> a b)
+    1
+    (* (term a)
+       (product term (next a) next b))))
+
+(define (iterative-product term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (* (term a) result))))
+    (iter a 1))
+
+(define (product-of-range a b) (product identity a inc b))
+(define (iter-product-of-range a b) (iterative-product identity a inc b))
+(define (factorial n) (iterative-product identity 1 inc n))
+
+; Generic accumate that can replace sum and product from above.
+(define (iterative-accumulate combiner null-value term a next b)
+  (define (iter a result)
+    (if (> a b)
+      result
+      (iter (next a) (combiner (term a) result))))
+  (iter a null-value))
+
+(define (accumulate combiner null-value term a next b)
+  (if (> a b)
+    null-value
+    (combiner (term a)
+              (accumulate combiner null-value term (next a) next b))))
+
+(define (sum2 a b) (accumulate + 0 identity a inc b))
+(define (product2 a b) (accumulate * 1 identity a inc b))
+(define (iter-sum2 a b) (iterative-accumulate + 0 identity a inc b))
+(define (iter-product2 a b) (iterative-accumulate * 1 identity a inc b))
+
