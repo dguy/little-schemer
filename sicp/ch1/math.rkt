@@ -2,7 +2,8 @@
 
 (provide cube halve double divisible? 
          square fast-prime? smallest-divisor 
-         prime? sum sum-cubes sum-ints)
+         prime? sum sum-cubes sum-ints
+         iterative-sum iter-sum-ints)
 
 (define (divisible? n by) (= 0 (remainder n by)))
 (define (square n) (* n n))
@@ -54,4 +55,12 @@
 (define (sum-cubes a b) (sum cube a inc b))
 (define (sum-ints a b) (sum identity a inc b))
 
+(define (iterative-sum term a next b)
+  (define (iter a result)
+    (if (> a b)
+        result
+        (iter (next a) (+ (term a) result))))
+    (iter a 0))
+      
 
+(define (iter-sum-ints a b) (iterative-sum identity a inc b))
