@@ -6,13 +6,14 @@
          iterative-sum iter-sum-ints
          product-of-range iter-product-of-range
          factorial sum2 product2 iter-sum2 iter-product2
-         sum-primes-in-range)
+         sum-primes-in-range sqrt average)
 
 (define (divisible? n by) (= 0 (remainder n by)))
 (define (square n) (* n n))
 (define (cube n) (* n (square n)))
 (define (halve n) (/ n 2))
 (define (double n) (+ n n))
+(define (average x y) (/ (+ x y) 2))
 
 (define (exp-mod base exponent m)
   (cond
@@ -110,8 +111,23 @@
     ((filter a) (combiner (term a) 
               (filtered-accumulate combiner filter null-value term (next a) next b)))
     (else (combiner null-value (filtered-accumulate combiner filter null-value term (next a) next b)))))
-  ;(if (or (> a b) (not (filter a)))
-  ;  null-value
 
 (define (sum-primes-in-range a b) (filtered-accumulate + prime? 0 identity a inc b))
 
+(define tolerance 0.00001)
+(define (fixed-point f first-guess)
+  (define (close-enough? v1 v2)
+    (< (abs (- v1 v2)) tolerance))
+  (define (try guess)
+    (let ((next (f guess)))
+      (if (close-enough? guess next)
+        next
+        (try next))))
+  (try first-guess))
+
+(define (average-damp f)
+  (lambda (x) (average x (f x))))
+(define (sqrt x)
+  (fixed-point (average-damp (lambda (y)  (/ x y))) 1.0))
+(define (cube-root x)
+  (fixed-point (average-damp (lambda (y) (/ x (square y)))) 1.0))
