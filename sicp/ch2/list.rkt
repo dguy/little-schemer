@@ -38,11 +38,26 @@
       (else (same-parity (cdr v) parity?))))
   (same-parity vals (parity? (car vals))))
   
+(define (map proc items)
+  (if (null? items) (list) 
+    (cons (proc (car items)) (map proc (cdr items)))))
 
+(define (scale-list items factor)
+  (map (lambda (x) (* factor x)) items))
+
+(define (for-each proc items)
+  (cond
+    ((null? items) #t)
+    (else 
+      (proc (car items)) 
+      (for-each proc (cdr items)))))
 
 (last (list 1 2 3 4 5 6))
 (last-v (list 1 2 3 4 5 6))
 (reverse (list 1 2 3 4 5 6))
 (same-parity  1 2 3 4 5 6 7)
 (better-same-parity  1 2 3 4 5 6 7)
-
+(map (lambda (x) (+ 5 x))  (list 1 2 3 4 5 6 7))
+(map (lambda (x) (* 5 x))  (list 1 2 3 4 5 6 7))
+(scale-list  (list 1 2 3 4 5 6 7) 10)
+(for-each (lambda (x)  (displayln x)) (list 57 321 88))
