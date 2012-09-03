@@ -1,5 +1,7 @@
 #lang racket
 
+(require "../../atom.rkt")
+
 (define (last vals)
   (define (iter v result)
     (cond
@@ -17,6 +19,12 @@
     ((null? (cdr vals)) vals)
     (else (append (reverse (cdr vals)) (list (car vals)))))) 
 
+(define (deep-reverse vals)
+  (cond
+    ((null? vals) (list))
+    ((atom? (car vals))
+            (append (deep-reverse (cdr vals)) (list (car vals))))
+    (else (append (deep-reverse (cdr vals)) (list (deep-reverse (car vals)))))))
 
 (define (parity? n) (if (even? n) even? odd?))
 
@@ -61,3 +69,5 @@
 (map (lambda (x) (* 5 x))  (list 1 2 3 4 5 6 7))
 (scale-list  (list 1 2 3 4 5 6 7) 10)
 (for-each (lambda (x)  (displayln x)) (list 57 321 88))
+(deep-reverse (list 1 2 (list 3 4) (list 5 6)))
+(deep-reverse (list (list (list 1 2) (list 7 8)) (list 3 4) (list 5 6)))
